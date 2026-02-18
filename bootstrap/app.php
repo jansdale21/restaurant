@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->validateCsrfTokens(except: ['products/*', 'menus/*', 'menu-products/*']);
+        $middleware->validateCsrfTokens(except: ['products','products/*','menus','menus/*','menu-products','menu-products/*',
+    ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         

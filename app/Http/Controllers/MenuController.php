@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMenuRequest;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 
@@ -26,12 +28,10 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMenuRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:128|unique:menus,name',
-        ]);
-        $menu = Menu::create($validated);
+        $menu = Menu::create($request->validated());
+        //return redirect()->route('menus.show', $menu->id);
         return response()->json($menu, 201);
     }
 
@@ -54,12 +54,10 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Menu $menu)
+    public function update(UpdateMenuRequest $request, Menu $menu)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:128|unique:menus,name,' . $menu->id,
-        ]);
-        $menu->update($validated);
+        $menu->update($request->validated());
+        //return redirect()->route('menus.show', $menu->id);
         return response()->json($menu, 200);
     }
 

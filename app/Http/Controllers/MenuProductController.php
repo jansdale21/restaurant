@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMenuProductRequest;
 use App\Models\MenuProduct;
 use Illuminate\Http\Request;
 
@@ -26,14 +27,11 @@ class MenuProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMenuProductRequest $request)
     {
-        $validated = $request->validate([
-            'menu_id' => 'required|exists:menus,id',
-            'product_id' => 'required|exists:products,id',
-        ]);
-        $menuProduct = MenuProduct::create($validated);
-        return response()->json($menuProduct, 201); 
+        $menuProduct = MenuProduct::create($request->validated());
+        //return redirect()->route('menu-products.show', $menuProduct->id);
+        return response()->json($menuProduct, 201);
     }
 
     /**
@@ -65,6 +63,7 @@ class MenuProductController extends Controller
      */
     public function destroy(MenuProduct $menuProduct)
     {
-        //
+        //$menuProduct->delete();
+        //return response()->json(['message' => 'Menu product deleted successfully', 'status' => 200]);
     }
 }
