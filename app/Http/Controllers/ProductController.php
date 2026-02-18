@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 
 class ProductController extends Controller
 {
@@ -28,14 +30,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:128|unique:products,name',
-            'price' => 'required|numeric|between:0,999.99',
-            'image_path' => 'nullable|string|max:255',
-        ]);
-        $product = Product::create($validated);
+        $product = Product::create($request->$validated());
+        return redirect()->route('product.show', $product->id);
         return response()->json($product, 201);
     }
 
@@ -60,11 +58,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $allInput = $request->all();
-        $product->name = $allInput['name'];
-        $product->price = $allInput['price'];
-        $product->image_path = $allInput['image_path'] ?? null;
-        $product->save();
+        $validated = $request->validate([
+            'name' => 'required|string|max:128|unique:products,name,' . $product->id,
+            'price' => 'required|numeric|between:0,999.99',
+            'image_path' => 'nullable|string|max:255',
+        ]);
+        $product->update($validated);
+        return response()->json($product, 200);
     }
 
     /**

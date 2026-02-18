@@ -12,7 +12,7 @@ class MenuProductController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(MenuProduct::all(), 200);
     }
 
     /**
@@ -28,7 +28,12 @@ class MenuProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'menu_id' => 'required|exists:menus,id',
+            'product_id' => 'required|exists:products,id',
+        ]);
+        $menuProduct = MenuProduct::create($validated);
+        return response()->json($menuProduct, 201); 
     }
 
     /**
@@ -36,7 +41,7 @@ class MenuProductController extends Controller
      */
     public function show(MenuProduct $menuProduct)
     {
-        //
+        return response()->json($menuProduct, 200);
     }
 
     /**

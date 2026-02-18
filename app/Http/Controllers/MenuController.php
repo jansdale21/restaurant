@@ -56,9 +56,11 @@ class MenuController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        $allInput = $request->all();
-        $menu->name = $allInput['name'];
-        $menu->save();
+        $validated = $request->validate([
+            'name' => 'required|string|max:128|unique:menus,name,' . $menu->id,
+        ]);
+        $menu->update($validated);
+        return response()->json($menu, 200);
     }
 
     /**
