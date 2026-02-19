@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMenuProductRequest;
+use App\Http\Requests\UpdateMenuProductRequest;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Models\MenuProduct;
 use Illuminate\Http\Request;
 
@@ -53,9 +55,10 @@ class MenuProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MenuProduct $menuProduct)
+    public function update(UpdateMenuProductRequest $request, MenuProduct $menuProduct)
     {
-        //
+        $menuProduct->update($request->validated());
+        return response()->json($menuProduct, 200);
     }
 
     /**
@@ -63,7 +66,7 @@ class MenuProductController extends Controller
      */
     public function destroy(MenuProduct $menuProduct)
     {
-        //$menuProduct->delete();
-        //return response()->json(['message' => 'Menu product deleted successfully', 'status' => 200]);
+        $menuProduct->delete();
+        return response()->json(['message' => 'Menu product deleted successfully', 'status' => 200]);
     }
 }

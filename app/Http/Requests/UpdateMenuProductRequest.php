@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMenuProductRequest extends FormRequest
+class UpdateMenuProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,10 @@ class StoreMenuProductRequest extends FormRequest
             'product_id' => [
                 'required',
                 'exists:products,id',
-                // Prevent duplicate menu-product combinations
+                // Prevent duplicate menu-product combinations, excluding the current record
                 \Illuminate\Validation\Rule::unique('menu_products')
                     ->where('menu_id', $this->menu_id)
+                    ->ignore($this->route('menu_product')->id),
             ],
         ];
     }

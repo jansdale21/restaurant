@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             //$table->softDeletes();
+
+            $table->unique(['menu_id', 'product_id']); // Prevent duplicate menu-product combinations
         });
     }
 
